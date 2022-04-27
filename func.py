@@ -20,8 +20,9 @@ mobWH = [295,285]
 lastClick = [0,0]
 
 def clickCoords(c):
-    randcoords = randCoords(c)
-    pyautogui.click(x=randcoords[0],y=randcoords[1],button='left')
+    if (c[0]>0):
+        randcoords = randCoords(c)
+        pyautogui.click(x=randcoords[0],y=randcoords[1],button='left')
     return
 
 def holdClick():
@@ -74,7 +75,7 @@ def checkClick(c,i=0):
         pos = imagesearcharea(i, windowRect[0],windowRect[1],windowRect[2],windowRect[3])
         if (pos[0] > 0):
             checkClick(c)
-    elif (i==0 and lastClick != c): #no image provided only check coordinates 
+    elif (i==0 and lastClick != c and c[0] > 0): #no image provided only check coordinates 
         pyautogui.click(x=c[0],y=c[1],button='left')
         lastClick = c
         

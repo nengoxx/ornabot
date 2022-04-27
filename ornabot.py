@@ -3,7 +3,7 @@ from time import sleep
 import pyautogui
 import keyboard
 import tkinter
-from win32gui import GetWindowText, GetForegroundWindow, GetWindowRect, MoveWindow
+from win32gui import *
 from automat import findMob
 from func import *
 import func
@@ -12,7 +12,7 @@ import automat
 
 #
 pyautogui.PAUSE = 0
-#pyautogui.FAILSAFE = False
+pyautogui.FAILSAFE = False
 #pyautogui.MINIMUM_SLEEP = 0
 pyautogui.MINIMUM_DURATION = 0
 
@@ -50,6 +50,12 @@ def showText():
 def get_active_window():
     return (GetWindowText(GetForegroundWindow()) == windowName)
 
+def set_active_window():
+    hwnd = FindWindow("SDL_app","Nexus 5")
+    if (hwnd !=0):
+        #SetForegroundWindow(hwnd)
+        SetActiveWindow(hwnd)
+
 def get_window_rect():
     if (get_active_window()):
         MoveWindow(GetForegroundWindow(),8,0,windowSize[0],windowSize[1],False)
@@ -67,6 +73,7 @@ def main():
     if __name__== "__main__" :
         keyboard.on_press_key('º',toggleBot)
         while True:
+            set_active_window()
             while (get_active_window()):
                 if botting:
                     # match automat.state:
@@ -87,8 +94,10 @@ def main():
                     #         findImage(i_cancel)
                     #         pyautogui.sleep(randint(1000, 2000)/1000)
                     # automat.checkState()
-                        
-                    if (automat.state == 2):
+                    
+                    if (automat.state==5):
+                        automat.refill()
+                    elif (automat.state == 2):
                         findImage(func.i_battle)
                         findImage(i_cancel)
                         pyautogui.sleep(randint(1000, 2000)/1000)
@@ -99,11 +108,10 @@ def main():
                     elif (automat.state == 4):
                         findImage(func.i_continue)
                         pyautogui.sleep(randint(1000, 2000)/1000)
+                        automat.foughtSinceRefill += 1
                     elif (automat.state == 1):
                         findImage(func.i_battle)
                         pyautogui.sleep(randint(1000, 2000)/1000)
-                    if (time.time() - automat.statetime > 30):
-                        automat.refill()
                     automat.checkState()
 
 

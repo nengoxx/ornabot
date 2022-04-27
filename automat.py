@@ -12,6 +12,7 @@ statetime = 0
 3-battle mob
 4-continue to world
 '''
+foughtSinceRefill = 0
 
 refill_button = [0,0]
 cancel_button = [0,0]
@@ -22,6 +23,7 @@ continue_button = [0,0]
 def checkState():
     global statetime
     global state
+    global foughtSinceRefill
     global refill_button 
     global cancel_button 
     global battle_button
@@ -33,31 +35,41 @@ def checkState():
     spell_button = [0,0]
     continue_button = [0,0]
     
+    if (time.time() - statetime > 20 or foughtSinceRefill > 12):
+        if (state != 5):
+            state = 5
+            statetime = time.time()
+        return
     
     battle_button = func.findButton(func.i_battle)
     if (battle_button[0] > 0): #mob select
-        state = 1
-        statetime = time.time()
+        if (state != 1):
+            state = 1
+            statetime = time.time()
         return   
     refill_button = func.findButton(func.i_refill)
     if (refill_button[0] > 0):                          #world
-        state = 0
-        statetime = time.time()
+        if (state != 0):
+            state = 0
+            statetime = time.time()
         return
     cancel_button = func.findButton(func.i_cancel)
     if (refill_button[0] < 0 and battle_button[0] < 0 and cancel_button[0] > 0): #codex or other non desirable state(find cancel button)
-        state = 2
-        statetime = time.time()
+        if (state != 2):
+            state = 2
+            statetime = time.time()
         return
     spell_button = func.findButton(func.i_spell)
     if (spell_button[0] > 0):
-        state = 3
-        statetime = time.time()
+        if (state != 3):
+            state = 3
+            statetime = time.time()
         return
     continue_button = func.findButton(func.i_continue)
     if (continue_button[0] > 0):
-        state = 4
-        statetime = time.time()
+        if (state != 4):
+            state = 4
+            statetime = time.time()
         return
     pyautogui.sleep(randint(1000, 2000)/1000)
     
@@ -98,11 +110,16 @@ def fightMob(t=20):
 
 def refill(hold=3000):
     global state
-    if (state==0):
-        refillcoords=func.randCoords(refill_button)
+    global foughtSinceRefill
+    if (state in [0,1,3,4,5]):
+        func.findImage(func.i_cancel)
+        pyautogui.sleep(randint(1000, 2000)/1000)
+        refillcoords=func.findImage(func.i_refill,click=False)
         pyautogui.moveTo(x=refillcoords[0],y=refillcoords[1],duration=0.5)
         pyautogui.mouseDown()
         pyautogui.sleep(randint(2000, hold)/1000)
         pyautogui.mouseUp()
+        foughtSinceRefill = 0
     else:
         state = 2
+    state = 0
