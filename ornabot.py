@@ -36,7 +36,7 @@ def showText():
     label = tkinter.Label(text='autoF', font=(None, '12', 'bold'), fg='white', bg='black')
     if ((botting == True) & get_active_window()):
         label.master.overrideredirect(True)
-        #label.master.geometry("+5+5")
+        label.master.geometry("+10+10")
         label.master.lift()
         label.master.wm_attributes("-topmost", True)
         label.master.wm_attributes("-disabled", True)
@@ -51,14 +51,14 @@ def get_active_window():
     return (GetWindowText(GetForegroundWindow()) == windowName)
 
 def set_active_window():
-    hwnd = FindWindow("SDL_app","Nexus 5")
+    hwnd = FindWindow("SDL_app",windowName)
     if (hwnd !=0):
         #SetForegroundWindow(hwnd)
         SetActiveWindow(hwnd)
 
 def get_window_rect():
     if (get_active_window()):
-        MoveWindow(GetForegroundWindow(),8,0,windowSize[0],windowSize[1],False)
+        MoveWindow(GetForegroundWindow(),0,0,windowSize[0],windowSize[1],False)
         rect = GetWindowRect(GetForegroundWindow())
         x = rect[0]
         y = rect[1]
