@@ -73,9 +73,9 @@ def checkClick(c,i=0):
     global lastClick
     if (i != 0 and lastClick != c): #recheck image just before clicking in case the animations are slow
         pos = imagesearcharea(i, windowRect[0],windowRect[1],windowRect[2],windowRect[3])
-        if (pos[0] > 0):
+        if (pos[0] > 20):
             checkClick(c)
-    elif (i==0 and lastClick != c and c[0] > 0): #no image provided only check coordinates 
+    elif (i==0 and lastClick != c and c[0] > 20): #no image provided only check coordinates 
         pyautogui.click(x=c[0],y=c[1],button='left')
         lastClick = c
         
