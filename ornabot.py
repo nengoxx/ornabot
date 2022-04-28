@@ -4,6 +4,7 @@ import pyautogui
 import keyboard
 import tkinter
 from win32gui import *
+import win32com.client
 from automat import findMob
 from func import *
 import func
@@ -53,8 +54,8 @@ def get_active_window():
 def set_active_window():
     hwnd = FindWindow("SDL_app",windowName)
     if (hwnd !=0):
-        #SetForegroundWindow(hwnd)
-        SetActiveWindow(hwnd)
+        win32com.client.Dispatch("WScript.Shell").SendKeys('%')
+        SetForegroundWindow(hwnd)
 
 def get_window_rect():
     if (get_active_window()):
