@@ -20,7 +20,7 @@ battle_button = [0,0]
 spell_button = [0,0]
 continue_button = [0,0]
 
-def checkState():
+def checkState(threaded=False):
     global statetime
     global state
     global foughtSinceRefill
@@ -71,7 +71,7 @@ def checkState():
             state = 4
             statetime = time.time()
         return
-    pyautogui.sleep(randint(1000, 2000)/1000)
+    #pyautogui.sleep(randint(1000, 2000)/1000)
     
 
 def findMob(t=5):

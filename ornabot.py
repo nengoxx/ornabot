@@ -1,4 +1,5 @@
 from random import randint
+import threading
 from time import sleep
 import pyautogui
 import keyboard
@@ -71,6 +72,7 @@ def get_window_rect():
 def main():
     global botting
     global state
+    stateThread = 0
     if __name__== "__main__" :
         keyboard.on_press_key('º',toggleBot)
         while True:
@@ -113,7 +115,9 @@ def main():
                     elif (automat.state == 1):
                         findImage(func.i_battle)
                         pyautogui.sleep(randint(1000, 2000)/1000)
-                    automat.checkState()
+                    if (stateThread == 0):
+                        x = threading.Thread(target=automat.checkState, args=(True,), daemon=True)
+                        x.start()
 
 
 main()
