@@ -68,6 +68,9 @@ def get_window_rect():
         h = rect[3]
         func.windowRect = [x,y,w,h]
         
+def stateThreading():
+    while True:
+        automat.checkState(True)
 
 def main():
     global botting
@@ -101,7 +104,7 @@ def main():
                     if (automat.state==5):
                         automat.refill()
                     elif (automat.state == 2):
-                        findImage(func.i_battle)
+                        #findImage(func.i_battle)
                         findImage(i_cancel)
                         pyautogui.sleep(randint(1000, 2000)/1000)
                     elif (automat.state == 0):
@@ -116,9 +119,9 @@ def main():
                         findImage(func.i_battle)
                         pyautogui.sleep(randint(1000, 2000)/1000)
                     if (stateThread == 0):
-                        x = threading.Thread(target=automat.checkState, args=(True,), daemon=True)
+                        x = threading.Thread(target=stateThreading, daemon=True)
                         x.start()
+                        stateThread = 1
 
-
-main()
-#
+if __name__ == '__main__':
+    main()
