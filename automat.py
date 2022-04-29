@@ -12,6 +12,7 @@ statetime = 0
 3-battle mob
 4-continue to world
 '''
+refillTime=0
 foughtSinceRefill = 0
 
 refill_button = [0,0]
@@ -23,6 +24,7 @@ continue_button = [0,0]
 def checkState(threaded=False):
     global statetime
     global state
+    global refillTime
     global foughtSinceRefill
     global refill_button 
     global cancel_button 
@@ -35,11 +37,10 @@ def checkState(threaded=False):
     # spell_button = [0,0]
     # continue_button = [0,0]
     
-    if ((time.time() - statetime > 20 and state == 3) or foughtSinceRefill > 10 or time.time() - statetime > 10):
-        if (state != 5):
-            state = 5
+    if ((time.time() - statetime > 30 and state == 3) or foughtSinceRefill > 10 or time.time() - statetime > 15):
+        if (refillTime != 1):
+            refillTime = 1
             statetime = time.time()
-        return
     
     battle_button = func.findButton(func.i_battle)
     if (battle_button[0] > 0): #mob select
@@ -93,7 +94,7 @@ def findMob(t=1):
             
             
         
-def fightMob(t=5):
+def fightMob(t=1):
     global state
     global spell_button
     global continue_button
@@ -102,20 +103,29 @@ def fightMob(t=5):
     while ((state==3) and ((time.time()-start) < t)):
         if (spell_button[0]>0):
             spellcoords=func.randCoords(spell_button)
-            pyautogui.moveTo(x=spellcoords[0],y=spellcoords[1],duration=0.5)
+            pyautogui.moveTo(x=spellcoords[0],y=spellcoords[1],duration=0.3)
             if (state != 3):
                 return
             func.checkClick(spellcoords)
         #pyautogui.sleep(randint(800, 1500)/1000)
         #checkState()
-
+        
+def flee(hold = 5000):
+    fleecoords=func.findImage(func.i_flee,click=False)
+    if (fleecoords[0]>30):
+            pyautogui.moveTo(x=fleecoords[0],y=fleecoords[1],duration=0.5)
+            pyautogui.mouseDown()
+            pyautogui.sleep(randint(2000, hold)/1000)
+            pyautogui.mouseUp()
+    
 
 def refill(hold=3000):
     global state
     global foughtSinceRefill
-    if (state in [0,1,3,4,5]):
-        func.findImage(func.i_cancel)
-        pyautogui.sleep(randint(1000, 2000)/1000)
+    global refillTime
+    if (refillTime == 1):
+        # func.findImage(func.i_cancel)
+        # pyautogui.sleep(randint(1000, 2000)/1000)
         refillcoords=func.findImage(func.i_refill,click=False)
         if (refillcoords[0]>30):
             pyautogui.moveTo(x=refillcoords[0],y=refillcoords[1],duration=0.5)
@@ -123,7 +133,30 @@ def refill(hold=3000):
             pyautogui.sleep(randint(2000, hold)/1000)
             pyautogui.mouseUp()
             foughtSinceRefill = 0
+            refillTime = 0
     else:
         state = 2
     state = 0
     
+def returnToWorld():
+    global state
+    if(refillTime==0):
+        return
+    match state:
+        case 0:#world
+            func.findImage(func.i_cancel)
+            pyautogui.sleep(randint(1000, 2000)/1000)
+        case 1:#entering battle
+            func.findImage(func.i_cancel)
+            pyautogui.sleep(randint(1000, 2000)/1000)
+        case 2:#wrong state
+            func.findImage(func.i_cancel)
+            pyautogui.sleep(randint(1000, 2000)/1000)
+        case 3:#battle
+            flee()
+        case 4:#continue
+            func.findImage(func.i_continue)
+            pyautogui.sleep(randint(1000, 2000)/1000)
+        case _:
+            func.findImage(func.i_cancel)
+            pyautogui.sleep(randint(1000, 2000)/1000)

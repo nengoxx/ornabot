@@ -82,48 +82,34 @@ def main():
             set_active_window()
             while (get_active_window()):
                 if botting:
-                    # match automat.state:
-                    #     case 0:
-                    #         findMob()
-                    #     case 1:
-                    #         findImage(func.i_battle)
-                    #         pyautogui.sleep(randint(1000, 2000)/1000)
-                    #     case 2:
-                    #         findImage(i_cancel)
-                    #         pyautogui.sleep(randint(1000, 2000)/1000)
-                    #     case 3:
-                    #         fightMob()
-                    #     case 4:
-                    #         findImage(func.i_continue)
-                    #         pyautogui.sleep(randint(1000, 2000)/1000)
-                    #     case _:
-                    #         findImage(i_cancel)
-                    #         pyautogui.sleep(randint(1000, 2000)/1000)
-                    # automat.checkState()
-                    
-                    if (automat.state==5):
-                        fightMob()
-                        automat.refill()
-                    elif (automat.state == 2):
-                        findImage(func.i_battle)
-                        if (automat.state == 2): #sometimes itdoesnt recognize the battle button fast enough in state 1
-                            findImage(i_cancel)
-                            pyautogui.sleep(randint(1000, 2000)/1000)
-                    elif (automat.state == 0):
-                        findMob()
-                    elif (automat.state == 3):
-                        fightMob()
-                    elif (automat.state == 4):
-                        findImage(func.i_continue)
-                        pyautogui.sleep(randint(1000, 2000)/1000)
-                        automat.foughtSinceRefill += 1
-                    elif (automat.state == 1):
-                        findImage(func.i_battle)
-                        pyautogui.sleep(randint(1000, 2000)/1000)
                     if (stateThread == 0):
                         x = threading.Thread(target=stateThreading, daemon=True)
                         x.start()
                         stateThread = 1
+                    
+                    if (automat.refillTime==1):
+                        returnToWorld()
+                        refill()
+                        
+                    match automat.state:
+                        case 0:#world
+                            findMob()
+                        case 1:#entering battle
+                            findImage(func.i_battle)
+                            pyautogui.sleep(randint(1000, 2000)/1000)
+                        case 2:#wrong state
+                            findImage(func.i_battle,searchtime=1)
+                            if (automat.state == 2): #sometimes itdoesnt recognize the battle button fast enough in state 1
+                                returnToWorld()
+                        case 3:#combat
+                            fightMob()
+                        case 4:#continue
+                            findImage(func.i_continue)
+                            pyautogui.sleep(randint(1000, 2000)/1000)
+                            automat.foughtSinceRefill += 1
+                        case _:
+                            returnToWorld()
+                    
 
 if __name__ == '__main__':
     main()
