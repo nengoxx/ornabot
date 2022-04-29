@@ -35,7 +35,7 @@ def checkState(threaded=False):
     # spell_button = [0,0]
     # continue_button = [0,0]
     
-    if ((time.time() - statetime > 20 and state == 3) or foughtSinceRefill > 12 or time.time() - statetime > 10):
+    if ((time.time() - statetime > 20 and state == 3) or foughtSinceRefill > 10 or time.time() - statetime > 10):
         if (state != 5):
             state = 5
             statetime = time.time()
@@ -117,11 +117,13 @@ def refill(hold=3000):
         func.findImage(func.i_cancel)
         pyautogui.sleep(randint(1000, 2000)/1000)
         refillcoords=func.findImage(func.i_refill,click=False)
-        pyautogui.moveTo(x=refillcoords[0],y=refillcoords[1],duration=0.5)
-        pyautogui.mouseDown()
-        pyautogui.sleep(randint(2000, hold)/1000)
-        pyautogui.mouseUp()
-        foughtSinceRefill = 0
+        if (refillcoords[0]>30):
+            pyautogui.moveTo(x=refillcoords[0],y=refillcoords[1],duration=0.5)
+            pyautogui.mouseDown()
+            pyautogui.sleep(randint(2000, hold)/1000)
+            pyautogui.mouseUp()
+            foughtSinceRefill = 0
     else:
         state = 2
     state = 0
+    

@@ -62,11 +62,13 @@ def findImage(i, timesample = 100, searchtime = 5, click = True):
         while (pos[0] == -1 and (time.time()-start) > searchtime):
             time.sleep(timesample)
             pos = imagesearcharea(i, windowRect[0],windowRect[1],windowRect[2],windowRect[3])
-    randcoords = randCoords(pos)
-    if (pos[0] > 0 and click):
-        pyautogui.moveTo(x=randcoords[0],y=randcoords[1],duration=0.5)
-        #pyautogui.click(x=randcoords[0],y=randcoords[1],button='left')
-        checkClick(randcoords,i)
+    randcoords = [0,0]
+    if (pos[0] > 0):
+        randcoords = randCoords(pos)
+        if  (click):
+            pyautogui.moveTo(x=randcoords[0],y=randcoords[1],duration=0.5)
+            #pyautogui.click(x=randcoords[0],y=randcoords[1],button='left')
+            checkClick(randcoords,i)
     return randcoords
     
 def checkClick(c,i=0):

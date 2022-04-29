@@ -102,11 +102,13 @@ def main():
                     # automat.checkState()
                     
                     if (automat.state==5):
+                        fightMob()
                         automat.refill()
                     elif (automat.state == 2):
-                        #findImage(func.i_battle)
-                        findImage(i_cancel)
-                        pyautogui.sleep(randint(1000, 2000)/1000)
+                        findImage(func.i_battle)
+                        if (automat.state == 2): #sometimes itdoesnt recognize the battle button fast enough in state 1
+                            findImage(i_cancel)
+                            pyautogui.sleep(randint(1000, 2000)/1000)
                     elif (automat.state == 0):
                         findMob()
                     elif (automat.state == 3):
