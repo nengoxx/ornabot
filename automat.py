@@ -76,6 +76,8 @@ def checkState(threaded=False):
     
 
 def findMob(t=1):
+    if (state != 0):
+        return
     global state
     global refill_button 
     global cancel_button 
@@ -95,6 +97,8 @@ def findMob(t=1):
             
         
 def fightMob(t=1):
+    if (state != 3):
+        return
     global state
     global spell_button
     global continue_button
