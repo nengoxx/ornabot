@@ -37,7 +37,7 @@ def checkState(threaded=False):
     # spell_button = [0,0]
     # continue_button = [0,0]
     
-    if ((time.time() - statetime > 30 and state == 3) or foughtSinceRefill > 10 or time.time() - statetime > 15):
+    if ((time.time() - statetime > 20 and state == 3) or foughtSinceRefill > 12 or time.time() - statetime > 10):
         if (refillTime != 1):
             refillTime = 1
             statetime = time.time()
@@ -115,12 +115,17 @@ def fightMob(t=1):
         #checkState()
         
 def flee(hold = 5000):
-    fleecoords=func.findImage(func.i_flee,click=False)
-    if (fleecoords[0]>30):
+    if (refillTime == 1):
+        fleecoords=func.findImage(func.i_flee,click=False)
+        if (fleecoords[0]>30):
             pyautogui.moveTo(x=fleecoords[0],y=fleecoords[1],duration=0.5)
             pyautogui.mouseDown()
             pyautogui.sleep(randint(2000, hold)/1000)
             pyautogui.mouseUp()
+        if(state==3):#if it fails, try to take down the mob
+            fightMob()
+            func.findImage(func.i_spell2)
+            
     
 
 def refill(hold=3000):
@@ -144,8 +149,6 @@ def refill(hold=3000):
     
 def returnToWorld():
     global state
-    if(refillTime==0):
-        return
     match state:
         case 0:#world
             func.findImage(func.i_cancel)

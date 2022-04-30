@@ -7,6 +7,7 @@ ssize = "720"
 
 i_battle = images_dir + 'battle_'+ ssize +'.PNG'
 i_spell = images_dir + 'spell_'+ ssize +'.PNG'
+i_spell2 = images_dir + 'spell2_'+ ssize +'.PNG'
 i_continue = images_dir + 'continue_'+ ssize +'.PNG'
 i_cancel = images_dir + 'cancel_'+ ssize +'.PNG'
 i_refill = images_dir + 'refill_'+ ssize +'.PNG'
