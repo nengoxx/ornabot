@@ -13,7 +13,7 @@ i_cancel = images_dir + 'cancel_'+ ssize +'.PNG'
 i_refill = images_dir + 'refill_'+ ssize +'.PNG'
 i_flee = images_dir + 'flee_'+ ssize +'.PNG'
 
-coordOffset = [30,10] # offset for the button coordinates x,y
+coordOffset = [10,30] # offset for the button coordinates x,y
 windowRect = [0,0,0,0]
 
 mobCoords=[70,240] #from x1 10 to x2 400; from y1 190 to y2 590

@@ -79,13 +79,14 @@ def main():
     if __name__== "__main__" :
         keyboard.on_press_key('º',toggleBot)
         while True:
-            set_active_window()
+            if(not get_active_window()):
+                set_active_window()
             while (get_active_window()):
                 if botting:
-                    if (stateThread == 0):
+                    if (stateThread < 1 ):
                         x = threading.Thread(target=stateThreading, daemon=True)
                         x.start()
-                        stateThread = 1
+                        stateThread += 1
                     
                     if (automat.refillTime==1):
                         returnToWorld()
@@ -98,7 +99,7 @@ def main():
                             findImage(func.i_battle)
                             pyautogui.sleep(randint(1000, 2000)/1000)
                         case 2:#wrong state
-                            findImage(func.i_battle,searchtime=1)
+                            #findImage(func.i_battle,searchtime=1)
                             if (automat.state == 2): #sometimes itdoesnt recognize the battle button fast enough in state 1
                                 returnToWorld()
                         case 3:#combat

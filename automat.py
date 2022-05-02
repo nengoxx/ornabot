@@ -37,7 +37,7 @@ def checkState(threaded=False):
     # spell_button = [0,0]
     # continue_button = [0,0]
     
-    if ((time.time() - statetime > 20 and state == 3) or foughtSinceRefill > 12 or time.time() - statetime > 10):
+    if ((time.time() - statetime > 20 and state == 3) or foughtSinceRefill > 20 or time.time() - statetime > 10):
         if (refillTime != 1):
             refillTime = 1
             statetime = time.time()
@@ -76,15 +76,15 @@ def checkState(threaded=False):
     
 
 def findMob(t=1):
+    global state
     if (state != 0):
         return
-    global state
     global refill_button 
     global cancel_button 
     global battle_button 
     start = time.time()
     #checkState()
-    while ((state==0) and ((time.time()-start) < t)):
+    while (state==0 and (time.time()-start) < t):
         randMobCoords = func.randCoords(func.mobCoords,func.mobWH) #get and click random coords for mobs to fight
         pyautogui.moveTo(x=randMobCoords[0],y=randMobCoords[1],duration=0.1)
         if (state != 0):
@@ -97,15 +97,15 @@ def findMob(t=1):
             
         
 def fightMob(t=1):
+    global state
     if (state != 3):
         return
-    global state
     global spell_button
     global continue_button
     start = time.time()
     #checkState()
-    while ((state==3) and ((time.time()-start) < t)):
-        if (spell_button[0]>0):
+    while (state==3 and (time.time()-start) < t):
+        if (spell_button[0]>30):
             spellcoords=func.randCoords(spell_button)
             pyautogui.moveTo(x=spellcoords[0],y=spellcoords[1],duration=0.3)
             if (state != 3):
@@ -115,7 +115,8 @@ def fightMob(t=1):
         #checkState()
         
 def flee(hold = 5000):
-    if (refillTime == 1):
+    global state
+    if (refillTime == 1 and state==3):
         fleecoords=func.findImage(func.i_flee,click=False)
         if (fleecoords[0]>30):
             pyautogui.moveTo(x=fleecoords[0],y=fleecoords[1],duration=0.5)
@@ -132,7 +133,7 @@ def refill(hold=3000):
     global state
     global foughtSinceRefill
     global refillTime
-    if (refillTime == 1):
+    if (refillTime == 1 and state ==0):
         # func.findImage(func.i_cancel)
         # pyautogui.sleep(randint(1000, 2000)/1000)
         refillcoords=func.findImage(func.i_refill,click=False)
