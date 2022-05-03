@@ -37,7 +37,7 @@ def checkState(threaded=False):
     # spell_button = [0,0]
     # continue_button = [0,0]
     
-    if ((time.time() - statetime > 20 and state == 3) or foughtSinceRefill > 20 or time.time() - statetime > 10):
+    if ((time.time() - statetime > 20 and state == 3) or foughtSinceRefill > 22 or time.time() - statetime > 10):
         if (refillTime != 1):
             refillTime = 1
             statetime = time.time()

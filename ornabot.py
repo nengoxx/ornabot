@@ -1,11 +1,7 @@
 from random import randint
 import threading
-from time import sleep
 import pyautogui
 import keyboard
-import tkinter
-from win32gui import *
-import win32com.client
 from func import *
 import func
 from automat import *
@@ -73,8 +69,6 @@ def stateThreading():
         automat.checkState(True)
 
 def main():
-    global botting
-    global state
     stateThread = 0
     if __name__== "__main__" :
         keyboard.on_press_key('º',toggleBot)
@@ -82,7 +76,7 @@ def main():
             if(not get_active_window()):
                 set_active_window()
             while (get_active_window()):
-                if botting:
+                if func.botting:
                     if (stateThread < 1 ):
                         x = threading.Thread(target=stateThreading, daemon=True)
                         x.start()
