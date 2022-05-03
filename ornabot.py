@@ -6,11 +6,12 @@ import keyboard
 import tkinter
 from win32gui import *
 import win32com.client
-from automat import findMob
 from func import *
 import func
 from automat import *
 import automat
+import telegram_bot
+import config
 
 #
 pyautogui.PAUSE = 0
@@ -18,55 +19,54 @@ pyautogui.FAILSAFE = False
 #pyautogui.MINIMUM_SLEEP = 0
 pyautogui.MINIMUM_DURATION = 0
 
-botting = False
-BarSpam = False
-windowName = "Nexus 5"
-windowSize = [424,759]
+# botting = False
+# windowName = "Nexus 5"
+# windowSize = [424,759]
 
 
 
-def toggleBot(kb_event_info):
-    get_window_rect()
-    global botting
-    botting = not botting
-    showText()
+# def toggleBot(kb_event_info):
+#     get_window_rect()
+#     global botting
+#     botting = not botting
+#     showText()
 
 
-def showText():
-    global botting
-    global label
-    label = tkinter.Label(text='autoF', font=(None, '12', 'bold'), fg='white', bg='black')
-    if ((botting == True) & get_active_window()):
-        label.master.overrideredirect(True)
-        label.master.geometry("+10+10")
-        label.master.lift()
-        label.master.wm_attributes("-topmost", True)
-        label.master.wm_attributes("-disabled", True)
-        label.master.wm_attributes("-transparentcolor", "black")
-        label.pack()
-        label.update()
-    else:
-        label.master.destroy()
+# def showText():
+#     global botting
+#     global label
+#     label = tkinter.Label(text='autoF', font=(None, '12', 'bold'), fg='white', bg='black')
+#     if ((botting == True) & get_active_window()):
+#         label.master.overrideredirect(True)
+#         label.master.geometry("+10+10")
+#         label.master.lift()
+#         label.master.wm_attributes("-topmost", True)
+#         label.master.wm_attributes("-disabled", True)
+#         label.master.wm_attributes("-transparentcolor", "black")
+#         label.pack()
+#         label.update()
+#     else:
+#         label.master.destroy()
 
 
-def get_active_window():
-    return (GetWindowText(GetForegroundWindow()) == windowName)
+# def get_active_window():
+#     return (GetWindowText(GetForegroundWindow()) == config.windowName)
 
-def set_active_window():
-    hwnd = FindWindow("SDL_app",windowName)
-    if (hwnd !=0):
-        win32com.client.Dispatch("WScript.Shell").SendKeys('%')
-        SetForegroundWindow(hwnd)
+# def set_active_window():
+#     hwnd = FindWindow("SDL_app",config.windowName)
+#     if (hwnd !=0):
+#         win32com.client.Dispatch("WScript.Shell").SendKeys('%')
+#         SetForegroundWindow(hwnd)
 
-def get_window_rect():
-    if (get_active_window()):
-        MoveWindow(GetForegroundWindow(),0,0,windowSize[0],windowSize[1],False)
-        rect = GetWindowRect(GetForegroundWindow())
-        x = rect[0]
-        y = rect[1]
-        w = rect[2]
-        h = rect[3]
-        func.windowRect = [x,y,w,h]
+# def get_window_rect():
+#     if (get_active_window()):
+#         MoveWindow(GetForegroundWindow(),0,0,config.windowSize[0],config.windowSize[1],False)
+#         rect = GetWindowRect(GetForegroundWindow())
+#         x = rect[0]
+#         y = rect[1]
+#         w = rect[2]
+#         h = rect[3]
+#         func.windowRect = [x,y,w,h]
         
 def stateThreading():
     while True:
@@ -113,4 +113,5 @@ def main():
                     
 
 if __name__ == '__main__':
+    # telegram_bot.setupTelegram()
     main()

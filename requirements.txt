@@ -2,3 +2,4 @@ pywin32
 tk
 pyautogui
 keyboard
+python-telegram-bot
