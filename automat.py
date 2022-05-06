@@ -1,7 +1,10 @@
 import time
-import func
 from random import randint
 import pyautogui
+import keyboard
+
+import config
+import func
 
 state = 0
 statetime = 0
@@ -15,6 +18,11 @@ statetime = 0
 refillTime=0
 foughtSinceRefill = 0
 
+useItems=0
+timeSinceItem = 0
+
+zoomout=0
+
 refill_button = [0,0]
 cancel_button = [0,0]
 battle_button = [0,0]
@@ -26,6 +34,9 @@ def checkState(threaded=False):
     global state
     global refillTime
     global foughtSinceRefill
+    global timeSinceItem
+    global useItems
+    
     global refill_button 
     global cancel_button 
     global battle_button
@@ -37,10 +48,22 @@ def checkState(threaded=False):
     # spell_button = [0,0]
     # continue_button = [0,0]
     
-    if ((time.time() - statetime > 20 and state == 3) or foughtSinceRefill > 22 or time.time() - statetime > 10):
+    if (statetime==0):
+        statetime=time.time()
+    
+    if (time.time() - statetime > 300):
+        func.relaunchApp()
+        state = 2
+        statetime = time.time()
+        return
+    
+    if ((time.time() - statetime > 15 and state == 3) or (time.time() - statetime > 10 and state!=3) or foughtSinceRefill > 20 ):
         if (refillTime != 1):
             refillTime = 1
             statetime = time.time()
+            
+    if((config.useCoins or config.useExpPot) and (time.time() - timeSinceItem > 3600)):
+        useItems=1
     
     battle_button = func.findButton(func.i_battle)
     if (battle_button[0] > 0): #mob select
@@ -60,7 +83,7 @@ def checkState(threaded=False):
             state = 2
             statetime = time.time()
         return
-    spell_button = func.findButton(func.i_spell)
+    spell_button = func.findButton(func.i_spell1)
     if (spell_button[0] > 0 and refill_button[0] < 0 and cancel_button[0] < 0):
         if (state != 3):
             state = 3
@@ -77,7 +100,7 @@ def checkState(threaded=False):
 
 def findMob(t=1):
     global state
-    if (state != 0):
+    if (state != 0 or (not func.botting)):
         return
     global refill_button 
     global cancel_button 
@@ -98,7 +121,7 @@ def findMob(t=1):
         
 def fightMob(t=1):
     global state
-    if (state != 3):
+    if (state != 3 or (not func.botting)):
         return
     global spell_button
     global continue_button
@@ -144,9 +167,48 @@ def refill(hold=3000):
             pyautogui.mouseUp()
             foughtSinceRefill = 0
             refillTime = 0
-    else:
-        state = 2
-    state = 0
+    # else:
+    #     state = 2
+    # state = 0
+    
+def use_Items(): #torch+coins
+    global state
+    global timeSinceItem
+    global useItems
+    if (useItems == 1 and (config.useCoins or config.useExpPot) and state ==0):
+        refillcoords=func.findImage(func.i_refill,click=False)
+        if (refillcoords[0]>30):
+            pyautogui.moveTo(x=refillcoords[0],y=refillcoords[1],duration=0.5)
+            if (state != 0):
+                return
+            func.checkClick(refillcoords)
+            pyautogui.sleep(randint(2000, 3000)/1000)
+            # if (config.useExpPot):
+            #     pyautogui.scroll(-5)
+                #TODO
+            if (state != 0 and state!=2):#TODO new state
+                return
+            # pyautogui.scroll(-20)
+            # keyboard.press('down_arrow')
+            # pyautogui.keyDown("down")
+            # kb.press(Key.down)
+            # pyautogui.sleep(randint(4000, 5000))
+            # kb.release(Key.down)
+            # pyautogui.keyUp("down")
+            # keyboard.release('down_arrow')
+            func.swipe('up')
+            func.swipe('up')
+            pyautogui.sleep(randint(700, 1000)/1000)
+            func.findImage(func.i_torch)
+            if (config.useCoins):
+                pyautogui.sleep(randint(700, 1000)/1000)
+                func.findImage(func.i_coin1)
+                pyautogui.sleep(randint(700, 1000)/1000)
+                func.findImage(func.i_coin2)
+            timeSinceItem = time.time()
+            useItems = 0
+            returnToWorld()
+    return
     
 def returnToWorld():
     global state
@@ -168,3 +230,16 @@ def returnToWorld():
         case _:
             func.findImage(func.i_cancel)
             pyautogui.sleep(randint(1000, 2000)/1000)
+            
+def zoomOut():
+    global zoomout
+    if (zoomout == 0):
+        zoomout = 1
+        return
+    if(state==0):
+        #pyautogui doesn't work for sending special keys to scrcpy
+        pyautogui.moveTo(x=func.mobCoords[0],y=func.mobCoords[1],duration=0.5)
+        keyboard.press('ctrl')
+        pyautogui.dragTo(func.mobCoords[0]+func.mobWH[0]/2, func.mobCoords[1]+func.mobWH[1]/2, 0.5, button='left')
+        keyboard.release('ctrl')
+        zoomout=0

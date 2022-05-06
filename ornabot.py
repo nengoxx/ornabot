@@ -72,10 +72,14 @@ def main():
     stateThread = 0
     if __name__== "__main__" :
         keyboard.on_press_key('º',toggleBot)
+        if(config.startTime==0):
+            config.startTime=time.time()
         while True:
             if(not get_active_window()):
                 set_active_window()
+                get_window_rect()
             while (get_active_window()):
+                func.showText()
                 if func.botting:
                     if (stateThread < 1 ):
                         x = threading.Thread(target=stateThreading, daemon=True)
@@ -84,11 +88,21 @@ def main():
                     
                     if (automat.refillTime==1):
                         returnToWorld()
-                        refill()
+                    #     refill()
+                        # continue
+                    
+                    
                         
                     match automat.state:
                         case 0:#world
-                            findMob()
+                            if(automat.zoomout==1):
+                                automat.zoomOut()
+                            if (automat.refillTime==1):
+                                refill()
+                            if (automat.useItems==1 and automat.refillTime==0):
+                                automat.use_Items()
+                            if(automat.refillTime==0 and automat.useItems==0):
+                                findMob()
                         case 1:#entering battle
                             findImage(func.i_battle)
                             pyautogui.sleep(randint(1000, 2000)/1000)
@@ -107,5 +121,6 @@ def main():
                     
 
 if __name__ == '__main__':
-    # telegram_bot.setupTelegram()
+    telegram_bot.setupTelegram()
+    func.connect()
     main()
