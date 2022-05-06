@@ -70,7 +70,7 @@ def lock(update, context):
 def zoomout(update, context):
     automat.zoomOut()
     config.telegram_chatId=update.message.chat_id
-    config.telegram_bot.send_message(chat_id=config.telegram_chatId, text='Zoomed out')
+    config.telegram_bot.send_message(chat_id=config.telegram_chatId, text='Zooming out: '+str(automat.zoomout))
 
 def sendTelegramScreenShot():
     try:
@@ -98,4 +98,4 @@ def toggleCoins(update, context):
     else:
         config.useCoins=1
     config.telegram_chatId=update.message.chat_id
-    config.telegram_bot.send_message(chat_id=config.telegram_chatId, text='Use coins: '+str(config.useCoins))
+    config.telegram_bot.send_message(chat_id=config.telegram_chatId, text='Using coins: '+str(config.useCoins))
