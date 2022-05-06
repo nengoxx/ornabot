@@ -51,7 +51,7 @@ def checkState(threaded=False):
     if (statetime==0):
         statetime=time.time()
     
-    if (time.time() - statetime > 300):
+    if (time.time() - statetime > 300 and func.botting):
         func.relaunchApp()
         state = 2
         statetime = time.time()

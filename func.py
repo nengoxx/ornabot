@@ -174,8 +174,12 @@ def get_active_window():
 def set_active_window():
     hwnd = FindWindow("SDL_app",windowName)
     if (hwnd !=0):
-        win32com.client.Dispatch("WScript.Shell").SendKeys('%')
-        SetForegroundWindow(hwnd)
+        try:
+            win32com.client.Dispatch("WScript.Shell").SendKeys('%')
+            SetForegroundWindow(hwnd)
+        except Exception:
+            traceback.print_exc()
+        pass
 
 def get_window_rect():
     global windowRect
@@ -208,10 +212,12 @@ def getBattery():
     battery = subprocess.getoutput("adb shell cat /sys/class/power_supply/battery/capacity")
     return battery
     
-def relaunchApp(launch=True):
-    subprocess.call('adb shell am force-stop playorna.com.orna')
-    subprocess.call('adb shell am start -n playorna.com.orna/playorna.com.orna.Index')
-    
+def relaunchApp(stop=True,start=True):
+    if (stop):
+        subprocess.call('adb shell am force-stop playorna.com.orna')
+    if (start):
+        subprocess.call('adb shell am start -n playorna.com.orna/playorna.com.orna.Index')
+       
 def swipe(dir='up'):
     # adb shell input swipe <start_x> <start_y> <end_x> <end_y> duration_ms>
     if(dir=='up'):

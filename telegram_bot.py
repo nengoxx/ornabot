@@ -11,13 +11,6 @@ import automat
 
 '''
 Commands:
-/start - demo
-/screen - screenshots 1st instance
-/pause - pauses the bot 
-/qch <mode> - changes quest or gw quest mode to 'mode'
-/berries - changes spam usage of berries 
-/capcha <capcha> - inputs 'capcha' as the captcha text in the verification dialog
-/vpause - pauses the bot after verification has triggered
 '''
 
 def setupTelegram():
@@ -28,6 +21,7 @@ def setupTelegram():
     dispatcher = updater.dispatcher
 
     start_handler = CommandHandler('start', start)
+    stop_handler = CommandHandler('stop', stop)
     screenshot_handler = CommandHandler('screen', screenshot)
     pause_handler = CommandHandler('pause', pause)
     lock_handler = CommandHandler('lock', lock)
@@ -36,6 +30,7 @@ def setupTelegram():
     coin_handler = CommandHandler('coin', toggleCoins)
 
     dispatcher.add_handler(start_handler)
+    dispatcher.add_handler(stop_handler)
     dispatcher.add_handler(screenshot_handler)
     dispatcher.add_handler(pause_handler)
     dispatcher.add_handler(lock_handler)
@@ -47,8 +42,14 @@ def setupTelegram():
 
 
 def start(update, context):
+    func.relaunchApp(stop=False)
     config.telegram_chatId=update.message.chat_id
-    config.telegram_bot.send_message(chat_id=update.message.chat_id, text="I'm a bot, please talk to me!")
+    config.telegram_bot.send_message(chat_id=update.message.chat_id, text="Orna starting...")
+
+def stop(update, context):
+    func.relaunchApp(start=False)
+    config.telegram_chatId=update.message.chat_id
+    config.telegram_bot.send_message(chat_id=update.message.chat_id, text="Orna closed!")
 
 
 def sendTelegramMsg(msg):

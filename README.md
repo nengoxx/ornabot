@@ -2,11 +2,12 @@
  bot for orna through scrcpy
 
 Commands:
+battery - check battery
 pause - pause/unpause bot
-lock - lock/unlock phone
 screen - screenshot
+zoom - zoom out
 coin - use coins and torch
 exp - use exp pot
-zoom - zoom out
-battery - check battery
-start - demo
+start - start orna
+stop - close orna
+lock - lock/unlock phone
