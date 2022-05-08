@@ -21,7 +21,7 @@ foughtSinceRefill = 0
 useItems=0
 timeSinceItem = 0
 
-zoomout=0
+zoomout=1
 
 refill_button = [0,0]
 cancel_button = [0,0]
@@ -53,11 +53,16 @@ def checkState(threaded=False):
     
     if (time.time() - statetime > 300 and func.botting):
         func.relaunchApp()
+        zoomOut()
         state = 2
         statetime = time.time()
         return
-    
-    if ((time.time() - statetime > 15 and state == 3) or (time.time() - statetime > 10 and state!=3) or foughtSinceRefill > 20 ):
+    #timeouts
+    if ((time.time() - statetime > 20 and state == 3) #in battle
+        or (time.time() - statetime > 5 and state==1) #entering battle
+        or (time.time() - statetime > 15 and state==0)
+        or (time.time() - statetime > 10 and (state!=3 and state!=1 and state!=0)) 
+        or foughtSinceRefill > 17 ):
         if (refillTime != 1):
             refillTime = 1
             statetime = time.time()
@@ -236,7 +241,7 @@ def zoomOut():
     if (zoomout == 0):
         zoomout = 1
         return
-    if(state==0):
+    if(state==0 and zoomout == 1):
         #pyautogui doesn't work for sending special keys to scrcpy
         pyautogui.moveTo(x=func.mobCoords[0],y=func.mobCoords[1],duration=0.5)
         keyboard.press('ctrl')

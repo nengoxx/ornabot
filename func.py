@@ -1,6 +1,7 @@
 import os
 import pathlib
 from random import random
+from time import sleep
 import tkinter
 import traceback
 from win32gui import *
@@ -179,7 +180,10 @@ def set_active_window():
             SetForegroundWindow(hwnd)
         except Exception:
             traceback.print_exc()
-        pass
+            disconnect()
+            sleep(2)
+            connect()
+            pass
 
 def get_window_rect():
     global windowRect
@@ -202,10 +206,15 @@ def saveScreenshot():
 ADB
 '''
 def connect():
-    subprocess.Popen("scrcpy -e --bit-rate 1M --max-size 720")
+    config.scrcpy=subprocess.Popen("scrcpy -e --bit-rate 1M --max-size 720")
+    
+def disconnect():
+    config.scrcpy.kill()
 
 def lockPhone():
-    subprocess.call("adb shell input keyevent 26")
+    ret=subprocess.call("adb shell input keyevent 26")
+    if (ret==0):
+        config.locked=not config.locked
     
 def getBattery():
     global battery
@@ -214,9 +223,11 @@ def getBattery():
     
 def relaunchApp(stop=True,start=True):
     if (stop):
-        subprocess.call('adb shell am force-stop playorna.com.orna')
+        if(subprocess.call('adb shell am force-stop playorna.com.orna')==0):
+            config.ingame=False
     if (start):
-        subprocess.call('adb shell am start -n playorna.com.orna/playorna.com.orna.Index')
+        if(subprocess.call('adb shell am start -n playorna.com.orna/playorna.com.orna.Index')==0):
+           config.ingame=True 
        
 def swipe(dir='up'):
     # adb shell input swipe <start_x> <start_y> <end_x> <end_y> duration_ms>

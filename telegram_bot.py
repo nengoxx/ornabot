@@ -28,6 +28,8 @@ def setupTelegram():
     zoomout_handler = CommandHandler('zoom', zoomout)
     battery_handler = CommandHandler('battery', getBattery)
     coin_handler = CommandHandler('coin', toggleCoins)
+    connect_handler = CommandHandler('c', connect)
+    dc_handler = CommandHandler('dc', dc)
 
     dispatcher.add_handler(start_handler)
     dispatcher.add_handler(stop_handler)
@@ -37,6 +39,8 @@ def setupTelegram():
     dispatcher.add_handler(zoomout_handler)
     dispatcher.add_handler(battery_handler)
     dispatcher.add_handler(coin_handler)
+    dispatcher.add_handler(connect_handler)
+    dispatcher.add_handler(dc_handler)
 
     updater.start_polling()
 
@@ -44,12 +48,24 @@ def setupTelegram():
 def start(update, context):
     func.relaunchApp(stop=False)
     config.telegram_chatId=update.message.chat_id
-    config.telegram_bot.send_message(chat_id=update.message.chat_id, text="Orna starting...")
+    config.telegram_bot.send_message(chat_id=update.message.chat_id, text="Orna starting...  In-game: "+str(config.ingame))
+    screenshot(update,context)
 
 def stop(update, context):
     func.relaunchApp(start=False)
     config.telegram_chatId=update.message.chat_id
-    config.telegram_bot.send_message(chat_id=update.message.chat_id, text="Orna closed!")
+    config.telegram_bot.send_message(chat_id=update.message.chat_id, text="Orna closed!  In-game: "+str(config.ingame))
+    screenshot(update,context)
+
+def connect(update, context):
+    func.connect()
+    config.telegram_chatId=update.message.chat_id
+    config.telegram_bot.send_message(chat_id=update.message.chat_id, text="Connecting to phone...")
+
+def dc(update, context):
+    func.disconnect()
+    config.telegram_chatId=update.message.chat_id
+    config.telegram_bot.send_message(chat_id=update.message.chat_id, text="Disconnected from phone!")
 
 
 def sendTelegramMsg(msg):
@@ -65,7 +81,8 @@ def pause(update, context):
 def lock(update, context):
     func.lockPhone()
     config.telegram_chatId=update.message.chat_id
-    config.telegram_bot.send_message(chat_id=config.telegram_chatId, text='Lock toggled')
+    config.telegram_bot.send_message(chat_id=config.telegram_chatId, text='Locked: '+str(config.locked))
+    screenshot(update,context)
 
 def zoomout(update, context):
     automat.zoomOut()

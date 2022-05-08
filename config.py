@@ -3,6 +3,7 @@
 from time import sleep, strftime
 
 bot=''
+scrcpy=None
 
 LOG_FILE = '[{}]asgbfBot.log'.format(strftime('%m-%d_%H%M'))
 
@@ -23,7 +24,8 @@ ADB
 serial_number = '044d769ff0c7540a'
 adb_host='192.168.1.137'
 adb_port=5555
-
+locked=False
+ingame=True
 '''
 AUTOMAT
 '''

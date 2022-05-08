@@ -11,3 +11,5 @@ exp - use exp pot
 start - start orna
 stop - close orna
 lock - lock/unlock phone
+c - connect scrcpy
+dc - disconnect scrcpy
