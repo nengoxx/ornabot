@@ -13,3 +13,5 @@ stop - close orna
 lock - lock/unlock phone
 c - connect scrcpy
 dc - disconnect scrcpy
+
+#### swiping needs to be reworked/randomized, it's very easy to trigger but I don't play anymore
